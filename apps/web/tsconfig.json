@@ -8,7 +8,9 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@ui/*": ["../../packages/ui/src/components/ui/*"],
+      "@ui/hooks/*": ["../../packages/ui/src/hooks/*"]
     }
   },
   "include": [
