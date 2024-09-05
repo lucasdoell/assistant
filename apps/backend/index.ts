@@ -63,6 +63,9 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.get("/", (_req, res) => res.send("Hello from Express!"));
 
 app.use("/v1/auth", v1AuthRouter);
