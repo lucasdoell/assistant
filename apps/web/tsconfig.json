@@ -10,6 +10,7 @@
     "paths": {
       "@/*": ["./*"],
       "@ui/*": ["../../packages/ui/src/components/ui/*"],
+      "@ui/lib/*": ["../../packages/ui/src/lib/*"],
       "@ui/hooks/*": ["../../packages/ui/src/hooks/*"]
     }
   },
