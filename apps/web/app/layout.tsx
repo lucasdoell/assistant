@@ -1,5 +1,7 @@
 import "@repo/ui/globals.css";
 
+import { CommandDialogMenu } from "@/components/cmd-menu";
+import { CommandMenuProvider } from "@/components/cmd-provider";
 import { QueryProvider } from "@/components/query-provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import { GeistSans } from "geist/font/sans";
@@ -24,7 +26,12 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <QueryProvider>{children}</QueryProvider>
+          <QueryProvider>
+            <CommandMenuProvider>
+              <CommandDialogMenu />
+              {children}
+            </CommandMenuProvider>
+          </QueryProvider>
         </ThemeProvider>
       </body>
     </html>
