@@ -12,7 +12,8 @@
     "mobile:dev": "turbo dev --filter=mobile",
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "ui:add": "pnpm --filter @repo/ui ui:add"
+    "ui:add": "pnpm --filter @repo/ui ui:add",
+    "gen": "turbo gen workspace"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
