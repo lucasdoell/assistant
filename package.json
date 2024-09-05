@@ -6,7 +6,7 @@
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
-    "web:dev": "turbo dev --filter=web",
+    "web:dev": "turbo dev --filter=web --filter=backend",
     "backend:dev": "turbo dev --filter=backend",
     "desktop:dev": "turbo dev --filter=desktop",
     "mobile:dev": "turbo dev --filter=mobile",
