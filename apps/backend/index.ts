@@ -1,5 +1,5 @@
 const server = Bun.serve({
-  port: 8080,
+  port: process.env.PORT ?? 8080,
   fetch(req) {
     return new Response("Hello World!");
   },
