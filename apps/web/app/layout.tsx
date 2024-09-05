@@ -1,9 +1,7 @@
 import "@repo/ui/globals.css";
+import { GeistSans } from "geist/font/sans";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import { ThemeProvider } from "../components/theme-provider";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "AI Assistant",
@@ -17,7 +15,7 @@ export default function RootLayout({
 }): JSX.Element {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={GeistSans.className}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
