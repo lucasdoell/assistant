@@ -1,3 +1,12 @@
 {
-  "extends": "@repo/typescript-config/bun.json"
+  "extends": "@repo/typescript-config/bun.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"]
+    },
+    "declaration": true,
+    "declarationMap": true
+  },
+  "exclude": ["node_modules"]
 }
