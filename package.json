@@ -10,6 +10,7 @@
     "backend:dev": "turbo dev --filter=backend",
     "desktop:dev": "turbo dev --filter=desktop",
     "mobile:dev": "turbo dev --filter=mobile",
+    "backend:build": "turbo build --filter=backend",
     "backend:start": "turbo start --filter=backend",
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
