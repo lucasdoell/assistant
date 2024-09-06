@@ -4,9 +4,8 @@ import { Request, Response } from "express";
 export async function meHandler(req: Request, res: Response) {
   const session = req.session;
   const sessionId = session.userId;
-  const userId = req.user?.id;
 
-  if (!sessionId && !userId) {
+  if (!sessionId) {
     return res.json({ message: "User already logged out." }).status(400);
   }
 
@@ -17,7 +16,7 @@ export async function meHandler(req: Request, res: Response) {
   }
 
   const user = await prisma.user.findUnique({
-    where: { id: userId },
+    where: { id: session.userId },
     select: { id: true, email: true, name: true },
   });
 
