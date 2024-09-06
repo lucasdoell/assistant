@@ -1,4 +1,5 @@
 import { authRouter as v1AuthRouter } from "@/v1/auth/routes";
+import { chatRouter as v1ChatRouter } from "@/v1/chat/routes";
 import RedisStore from "connect-redis";
 import cors from "cors";
 import express from "express";
@@ -67,6 +68,7 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/", (_req, res) => res.send("Hello from Express!"));
 
 app.use("/v1/auth", v1AuthRouter);
+app.use("/v1/chat", v1ChatRouter);
 
 app.listen(process.env.PORT, () => {
   console.log(`Server listening on port ${process.env.PORT}...`);
