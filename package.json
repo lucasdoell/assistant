@@ -10,6 +10,7 @@
     "backend:dev": "turbo dev --filter=backend",
     "desktop:dev": "turbo dev --filter=desktop",
     "mobile:dev": "turbo dev --filter=mobile",
+    "backend:start": "pnpm --filter @repo/backend start",
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "ui:add": "pnpm --filter @repo/ui ui:add",
