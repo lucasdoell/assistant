@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { Request, Response } from "express";
 
-export async function meHandler(req: Request, res: Response) {
+export async function userHandler(req: Request, res: Response) {
   const session = req.session;
   const sessionId = session.userId;
 
