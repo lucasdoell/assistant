@@ -4,6 +4,6 @@ import express from "express";
 
 const chatRouter = express.Router();
 
-chatRouter.get("/", authenticate(), chatController);
+chatRouter.post("/", authenticate(), chatController);
 
 export { chatRouter };
