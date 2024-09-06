@@ -9,10 +9,7 @@ import { createClient } from "redis";
 const app = express();
 app.set("trust proxy", 1);
 
-const kv = createClient({
-  url: process.env.REDIS_URL,
-});
-
+const kv = createClient({ url: process.env.REDIS_URL });
 kv.connect().catch(console.error);
 
 const redisStore = new RedisStore({
@@ -62,6 +59,7 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(passport.authenticate("session"));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
