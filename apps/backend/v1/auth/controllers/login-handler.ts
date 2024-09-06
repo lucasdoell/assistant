@@ -19,7 +19,8 @@ export async function loginHandler(req: Request, res: Response) {
     return res.json({ message: "User not found" }).status(404);
   }
 
-  await argon2.verify(user.password, credentials.password).catch();
+  const valid = await argon2.verify(user.password, credentials.password);
+  if (!valid) return res.json({ message: "Invalid password" }).status(401);
 
   req.session.userId = String(user.id);
 
