@@ -1,9 +1,12 @@
 import { Button } from "@ui/button";
+import Link from "next/link";
 
 export default function Page() {
   return (
     <main>
-      <Button>Click me</Button>
+      <Button asChild>
+        <Link href="/dashboard">Dashboard</Link>
+      </Button>
     </main>
   );
 }
