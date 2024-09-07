@@ -1,28 +1,28 @@
 import { prisma } from "@/lib/prisma";
+import { PrismaAdapter } from "@lucia-auth/adapter-prisma";
 import { User } from "@repo/db";
-import { SessionData } from "express-session";
+import { Lucia } from "lucia";
 
-type AuthResult =
-  | {
-      success: true;
-      data: User;
-    }
-  | {
-      success: false;
-      error: string;
+const adapter = new PrismaAdapter(prisma.session, prisma.user);
+
+export const lucia = new Lucia(adapter, {
+  sessionCookie: {
+    attributes: {
+      secure: process.env.NODE_ENV === "production",
+    },
+  },
+  getUserAttributes: (attributes) => {
+    return {
+      id: attributes.id,
+      name: attributes.name,
+      email: attributes.email,
     };
+  },
+});
 
-export async function auth(session: SessionData): Promise<AuthResult> {
-  let user: User | null;
-
-  try {
-    user = await prisma.user.findUnique({ where: { id: session.userId } });
-  } catch (error) {
-    console.log("Error fetching user:", error);
-    return { success: false, error: "Internal server error" };
+declare module "lucia" {
+  interface Register {
+    Lucia: typeof lucia;
+    DatabaseUserAttributes: User;
   }
-
-  if (!user) return { success: false, error: "User not found" };
-
-  return { success: true, data: user };
 }
