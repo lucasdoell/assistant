@@ -1,13 +1,20 @@
 import { lucia } from "@/lib/auth";
 import type { Context } from "@/lib/context";
-import { loginRouter } from "@/v1/auth/routes/login";
-import { logoutRouter } from "@/v1/auth/routes/logout";
-import { signupRouter } from "@/v1/auth/routes/signup";
+import { loginRouter } from "@/v1/auth/login";
+import { logoutRouter } from "@/v1/auth/logout";
+import { signupRouter } from "@/v1/auth/signup";
+import { userRouter } from "@/v1/auth/user";
+import { chatRouter } from "@/v1/chat";
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
+import { cors } from "hono/cors";
 import { verifyRequestOrigin } from "lucia";
 
 const app = new Hono<Context>();
+
+const ALLOWED_ORIGINS = ["http://localhost:3001"];
+
+app.use("*", cors({ origin: ALLOWED_ORIGINS }));
 
 app.use("*", async (c, next) => {
   if (c.req.method === "GET") {
@@ -20,10 +27,21 @@ app.use("*", async (c, next) => {
   if (
     !originHeader ||
     !hostHeader ||
-    !verifyRequestOrigin(originHeader, [hostHeader])
+    !verifyRequestOrigin(originHeader, ALLOWED_ORIGINS)
   ) {
     return c.body(null, 403);
   }
+
+  // const originHeader = c.req.header("Origin") ?? null;
+  // const hostHeader = c.req.header("Host") ?? null;
+
+  // if (
+  //   !originHeader ||
+  //   !hostHeader ||
+  //   !verifyRequestOrigin(originHeader, [hostHeader])
+  // ) {
+  //   return c.body(null, 403);
+  // }
 
   return next();
 });
@@ -55,7 +73,12 @@ app.use("*", async (c, next) => {
   return next();
 });
 
-app.route("/", loginRouter).route("/", signupRouter).route("/", logoutRouter);
+app
+  .route("/", loginRouter)
+  .route("/", signupRouter)
+  .route("/", logoutRouter)
+  .route("/", userRouter)
+  .route("/", chatRouter);
 
 serve({
   fetch: app.fetch,
