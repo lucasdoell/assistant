@@ -1,75 +1,65 @@
-import { authRouter as v1AuthRouter } from "@/v1/auth/routes";
-import { chatRouter as v1ChatRouter } from "@/v1/chat/routes";
-import RedisStore from "connect-redis";
-import cors from "cors";
-import express from "express";
-import session from "express-session";
-import passport from "passport";
-import { createClient } from "redis";
+import { lucia } from "@/lib/auth";
+import type { Context } from "@/lib/context";
+import { loginRouter } from "@/v1/auth/routes/login";
+import { logoutRouter } from "@/v1/auth/routes/logout";
+import { signupRouter } from "@/v1/auth/routes/signup";
+import { serve } from "@hono/node-server";
+import { Hono } from "hono";
+import { verifyRequestOrigin } from "lucia";
 
-const app = express();
-app.set("trust proxy", 1);
+const app = new Hono<Context>();
 
-const kv = createClient({ url: process.env.REDIS_URL });
-kv.connect().catch(console.error);
+app.use("*", async (c, next) => {
+  if (c.req.method === "GET") {
+    return next();
+  }
 
-const redisStore = new RedisStore({
-  client: kv,
-  prefix: "auth:",
-  disableTouch: true,
+  const originHeader = c.req.header("Origin") ?? null;
+  const hostHeader = c.req.header("Host") ?? null;
+
+  if (
+    !originHeader ||
+    !hostHeader ||
+    !verifyRequestOrigin(originHeader, [hostHeader])
+  ) {
+    return c.body(null, 403);
+  }
+
+  return next();
 });
 
-kv.on("error", (error: Error) => {
-  console.error(error.message);
+app.use("*", async (c, next) => {
+  const sessionId = lucia.readSessionCookie(c.req.header("Cookie") ?? "");
+  if (!sessionId) {
+    c.set("user", null);
+    c.set("session", null);
+    return next();
+  }
+
+  const { session, user } = await lucia.validateSession(sessionId);
+  if (session && session.fresh) {
+    c.header("Set-Cookie", lucia.createSessionCookie(session.id).serialize(), {
+      append: true,
+    });
+  }
+
+  if (!session) {
+    c.header("Set-Cookie", lucia.createBlankSessionCookie().serialize(), {
+      append: true,
+    });
+  }
+
+  c.set("session", session);
+  c.set("user", user);
+
+  return next();
 });
 
-kv.on("connect", function () {
-  console.log(`Redis connected at ${process.env.REDIS_URL}`);
+app.route("/", loginRouter).route("/", signupRouter).route("/", logoutRouter);
+
+serve({
+  fetch: app.fetch,
+  port: 8080,
 });
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      const origins = String(process.env.CORS_ORIGIN).split(",");
-      if (!origin || origins.includes(String(origin))) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed."), false);
-      }
-    },
-    credentials: true,
-    optionsSuccessStatus: 200,
-  }),
-);
-
-app.use(
-  session({
-    name: process.env.SESSION_COOKIE_NAME,
-    secret: String(process.env.SESSION_SECRET),
-    store: redisStore as any,
-    cookie: {
-      secure: process.env.NODE_ENV === "production",
-      httpOnly: true,
-      maxAge: 60 * 60 * 24 * 30,
-      sameSite: "lax",
-    },
-    resave: false,
-    saveUninitialized: false,
-  }),
-);
-
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(passport.authenticate("session"));
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-app.get("/", (_req, res) => res.send("Hello from Express!"));
-
-app.use("/v1/auth", v1AuthRouter);
-app.use("/v1/chat", v1ChatRouter);
-
-app.listen(process.env.PORT, () => {
-  console.log(`Server listening on port ${process.env.PORT}...`);
-});
+console.log("Server running on port 8080");
