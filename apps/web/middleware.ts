@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 const AUTH_ROUTES = ["/login", "/signup"];
 
 export async function middleware(request: NextRequest) {
-  const cookie = request.cookies.get("luxAuth")?.value;
+  const cookie = request.cookies.get("auth_session")?.value;
 
   if (AUTH_ROUTES.includes(request.nextUrl.pathname)) {
     if (cookie) {
