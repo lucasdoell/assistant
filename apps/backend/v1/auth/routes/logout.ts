@@ -4,15 +4,13 @@ import { Hono } from "hono";
 
 export const logoutRouter = new Hono<Context>().basePath("/v1/auth");
 
-logoutRouter.post("/", async (c) => {
+logoutRouter.post("/logout", async (c) => {
   const session = c.get("session");
-  if (!session) {
-    return c.body(null, 401);
-  }
+  if (!session) return c.body(null, 401);
 
   await lucia.invalidateSession(session.id);
 
   c.header("Set-Cookie", lucia.createBlankSessionCookie().serialize());
 
-  return c.redirect("/login");
+  return c.json({ message: "User logged out successfully" }, 200);
 });
