@@ -10,17 +10,14 @@ export const loginRouter = new Hono<Context>().basePath("/v1/auth");
 loginRouter.get("/login", async (c) => {
   const session = c.get("session");
   if (session) {
-    return c.redirect("/");
+    return c.json(session, 200);
   }
 
   return c.json({ message: "User logged in successfully" }, 200);
 });
 
 loginRouter.post("/login", async (c) => {
-  const body = await c.req.parseBody<{
-    email: string;
-    password: string;
-  }>();
+  const body = await c.req.json();
 
   const email: string | null = body.email ?? null;
 
@@ -75,5 +72,5 @@ loginRouter.post("/login", async (c) => {
 
   c.header("Location", "/", { append: true });
 
-  return c.redirect("/");
+  return c.json({ message: "User logged in successfully" }, 200);
 });
