@@ -17,19 +17,11 @@ signupRouter.get("/signup", async (c) => {
 });
 
 signupRouter.post("/signup", async (c) => {
-  const body = await c.req.parseBody<{
-    email: string;
-    password: string;
-  }>();
+  const body = await c.req.json();
 
   const email: string | null = body.email ?? null;
 
-  if (
-    !email ||
-    email.length < 3 ||
-    email.length > 31 ||
-    z.string().email().safeParse(email).success === false
-  ) {
+  if (!email || z.string().email().safeParse(email).success === false) {
     return c.json({ message: "Invalid password" }, 400);
   }
 
@@ -64,7 +56,7 @@ signupRouter.post("/signup", async (c) => {
       append: true,
     });
 
-    return c.redirect("/");
+    return c.json({ message: "User created successfully" }, 200);
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       if (e.code === "P2002") {
