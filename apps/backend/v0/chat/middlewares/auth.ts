@@ -1,4 +1,4 @@
-import { auth } from "@/lib/auth";
+import { auth } from "@/lib/v0-auth";
 import { NextFunction, Request, Response } from "express";
 
 export function authenticate() {
