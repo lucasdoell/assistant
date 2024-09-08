@@ -8,9 +8,12 @@ import { chatRouter } from "@/v1/chat";
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
+import { logger } from "hono/logger";
 import { verifyRequestOrigin } from "lucia";
 
 const app = new Hono<Context>();
+
+app.use(logger());
 
 const ALLOWED_ORIGINS = ["http://localhost:3001"];
 
@@ -31,17 +34,6 @@ app.use("*", async (c, next) => {
   ) {
     return c.body(null, 403);
   }
-
-  // const originHeader = c.req.header("Origin") ?? null;
-  // const hostHeader = c.req.header("Host") ?? null;
-
-  // if (
-  //   !originHeader ||
-  //   !hostHeader ||
-  //   !verifyRequestOrigin(originHeader, [hostHeader])
-  // ) {
-  //   return c.body(null, 403);
-  // }
 
   return next();
 });
