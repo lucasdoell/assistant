@@ -19,6 +19,12 @@ signupRouter.get("/signup", async (c) => {
 signupRouter.post("/signup", async (c) => {
   const body = await c.req.json();
 
+  const name: string | null = body.name ?? null;
+
+  if (!name || z.string().min(1).max(24).safeParse(name).success === false) {
+    return c.json({ message: "Invalid name" }, 400);
+  }
+
   const email: string | null = body.email ?? null;
 
   if (!email || z.string().email().safeParse(email).success === false) {
@@ -45,7 +51,8 @@ signupRouter.post("/signup", async (c) => {
     await prisma.user.create({
       data: {
         id: userId,
-        email: email,
+        name,
+        email,
         password: passwordHash,
       },
     });
