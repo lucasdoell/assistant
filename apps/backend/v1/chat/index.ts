@@ -1,20 +1,20 @@
 import { Context } from "@/lib/context";
 import { openai } from "@ai-sdk/openai";
-import { Message, convertToCoreMessages, streamText } from "ai";
+import { CoreMessage, streamText } from "ai";
 import { Hono } from "hono";
 import { streamText as honoStream } from "hono/streaming";
 
 export const chatRouter = new Hono<Context>().basePath("/v1/chat");
 
 chatRouter.post("/", async (c) => {
-  const { messages } = await c.req.json<{ messages: Message[] }>();
+  const { messages } = await c.req.json<{ messages: CoreMessage[] }>();
 
   return honoStream(
     c,
     async (stream) => {
       const result = await streamText({
         model: openai("gpt-4-turbo"),
-        messages: convertToCoreMessages(messages),
+        messages: messages,
       });
 
       const responseStream = result.toDataStreamResponse();
