@@ -17,8 +17,13 @@ chatRouter.post("/", async (c) => {
         messages: convertToCoreMessages(messages),
       });
 
-      // Convert ReadableStream to async iterable
-      const reader = result.toAIStream().getReader();
+      const responseStream = result.toDataStreamResponse();
+
+      // Create a reader to read the response stream
+      const reader = responseStream.body?.getReader();
+      if (!reader) {
+        throw new Error("Failed to get reader from response stream.");
+      }
 
       try {
         while (true) {
@@ -33,7 +38,6 @@ chatRouter.post("/", async (c) => {
       }
     },
     async (err, stream) => {
-      // Error handling should be async and return a Promise
       stream.writeln("An error occurred!");
       console.error(err);
     },
