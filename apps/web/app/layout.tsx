@@ -4,6 +4,7 @@ import { CommandDialogMenu } from "@/components/cmd-menu";
 import { CommandMenuProvider } from "@/components/cmd-provider";
 import { QueryProvider } from "@/components/query-provider";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@ui/toaster";
 import { TooltipProvider } from "@ui/tooltip";
 import { GeistSans } from "geist/font/sans";
 import type { Metadata } from "next";
@@ -30,8 +31,9 @@ export default function RootLayout({
           <QueryProvider>
             <CommandMenuProvider>
               <TooltipProvider>
-                <CommandDialogMenu />
                 {children}
+                <CommandDialogMenu />
+                <Toaster />
               </TooltipProvider>
             </CommandMenuProvider>
           </QueryProvider>
