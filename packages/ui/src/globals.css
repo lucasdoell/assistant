@@ -118,11 +118,14 @@
     margin-bottom: 0.5rem;
   }
 
-  .markdown-content ul,
+  .markdown-content ul {
+    margin-left: 1.5rem;
+    margin-bottom: 0.5rem;
+    list-style-type: disc;
+  }
   .markdown-content ol {
     margin-left: 1.5rem;
     margin-bottom: 0.5rem;
-    /* add numbering to list items */
     list-style-type: decimal;
   }
 
