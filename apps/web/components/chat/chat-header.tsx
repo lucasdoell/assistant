@@ -8,7 +8,7 @@ export function ChatHeader() {
     <div className="flex items-center justify-between p-4 border-b border-border bg-background h-20">
       <div className="flex items-center space-x-4">
         <Avatar>
-          <AvatarImage src={openai.src} />
+          <AvatarImage src={openai.src} className="dark:invert select-none" />
           <AvatarFallback>AI</AvatarFallback>
         </Avatar>
         <div>
