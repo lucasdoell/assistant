@@ -86,3 +86,31 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  .message-tail-left::before {
+    content: "";
+    position: absolute;
+    left: -10px;
+    bottom: 0;
+    width: 20px;
+    height: 25px;
+    background-color: hsl(var(--accent));
+    border-bottom-right-radius: 16px;
+    border-top-left-radius: 4px;
+    clip-path: polygon(100% 0, 100% 100%, 0 100%, 100% 0);
+  }
+
+  .message-tail-right::before {
+    content: "";
+    position: absolute;
+    right: -10px;
+    bottom: 0;
+    width: 20px;
+    height: 25px;
+    background-color: hsl(var(--primary));
+    border-bottom-left-radius: 16px;
+    border-top-right-radius: 4px;
+    clip-path: polygon(0 0, 100% 100%, 0 100%, 0 0);
+  }
+}
