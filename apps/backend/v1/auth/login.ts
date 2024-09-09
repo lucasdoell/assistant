@@ -27,13 +27,13 @@ loginRouter.post("/login", async (c) => {
     email.length > 31 ||
     z.string().email().safeParse(email).success === false
   ) {
-    return c.json({ message: "Invalid password" }, 400);
+    return c.json({ message: "Invalid password" }, 403);
   }
 
   const password: string | null = body.password ?? null;
 
   if (!password || password.length < 6 || password.length > 255) {
-    return c.json({ message: "Invalid password" }, 400);
+    return c.json({ message: "Invalid password" }, 403);
   }
 
   const existingUser = await prisma.user.findUnique({
@@ -41,7 +41,7 @@ loginRouter.post("/login", async (c) => {
   });
 
   if (!existingUser) {
-    return c.json({ message: "Incorrect email or password" }, 400);
+    return c.json({ message: "Incorrect email or password" }, 403);
   }
 
   const validPassword = await verify(existingUser.password, password, {
@@ -61,7 +61,7 @@ loginRouter.post("/login", async (c) => {
     // Since protecting against this is non-trivial,
     // it is crucial your implementation is protected against brute-force attacks with login throttling, 2FA, etc.
     // If usernames are public, you can outright tell the user that the username is invalid.
-    return c.json({ message: "Incorrect email or password" }, 400);
+    return c.json({ message: "Incorrect email or password" }, 403);
   }
 
   const session = await lucia.createSession(existingUser.id, {});
