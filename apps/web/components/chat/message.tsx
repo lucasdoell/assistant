@@ -11,6 +11,9 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/cjs/styles/prism";
 
 const MarkdownComponents: Components = {
+  li({ node, className, children, ...props }) {
+    return <li className={cn(className, "whitespace-normal")}>{children}</li>;
+  },
   code({ node, className, children, ...props }) {
     const match = /language-(\w+)/.exec(className || "");
 
@@ -24,8 +27,8 @@ const MarkdownComponents: Components = {
         {String(children).replace(/\n$/, "")}
       </SyntaxHighlighter>
     ) : (
-      <code className={className} {...props}>
-        {children}
+      <code className={cn(className, "font-semibold")} {...props}>
+        `{children}`
       </code>
     );
   },
