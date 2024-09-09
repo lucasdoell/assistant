@@ -13,7 +13,7 @@ chatRouter.post("/", async (c) => {
     c,
     async (stream) => {
       const result = await streamText({
-        model: openai("gpt-4-turbo"),
+        model: openai("gpt-4o-2024-08-06"),
         messages: messages,
       });
 
