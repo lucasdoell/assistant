@@ -47,10 +47,10 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       },
     });
 
-    const user = await res.json();
+    const body = await res.json();
 
-    if (user.id) {
-      router.push("/dashboard");
+    if ("message" in body) {
+      router.push("/chat");
     } else {
       setIsLoading(false);
       form.setError("email", {
