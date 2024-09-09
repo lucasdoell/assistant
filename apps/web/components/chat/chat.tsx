@@ -17,7 +17,7 @@ export function Chat() {
       <ChatHeader />
 
       {/* Messages */}
-      <ScrollArea className="flex-1 p-4 pb-20">
+      <ScrollArea className="flex-1 p-4 pb-20 max-w-4xl mx-auto">
         {messages.map((m) => (
           <Message key={m.id} message={m} />
         ))}

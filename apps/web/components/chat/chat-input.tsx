@@ -13,7 +13,7 @@ export function ChatInput({
 }) {
   return (
     <form onSubmit={handleSubmit}>
-      <div className="absolute bottom-4 left-4 right-4">
+      <div className="absolute bottom-4 left-4 right-4 max-w-4xl mx-auto">
         <div className="flex items-center space-x-2 bg-background rounded-full shadow-lg p-2">
           <Button variant="ghost" size="icon" className="rounded-full">
             <Paperclip className="h-6 w-6" />
