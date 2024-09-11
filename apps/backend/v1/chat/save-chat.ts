@@ -1,13 +1,16 @@
 import { prisma } from "@/lib/prisma";
-import { CoreMessage } from "ai";
+import { Message } from "ai";
 
 export async function saveChat(
-  messages: CoreMessage[],
+  messages: Message[],
   text: string,
   chatId: string,
   userId: string,
 ) {
-  const chat = [...messages, { role: "assistant", content: text }];
+  const chat = [
+    ...messages,
+    { role: "assistant", content: text, createdAt: new Date() },
+  ];
 
   console.log("Saving chat...");
 
