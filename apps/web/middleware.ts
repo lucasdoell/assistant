@@ -8,7 +8,7 @@ export async function middleware(request: NextRequest) {
 
   if (AUTH_ROUTES.includes(request.nextUrl.pathname)) {
     if (cookie) {
-      return NextResponse.redirect(new URL("/dashboard", request.url));
+      return NextResponse.redirect(new URL("/chat", request.url));
     }
 
     return null;
