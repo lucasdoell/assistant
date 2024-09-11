@@ -38,7 +38,7 @@ export function Chat({
       <ChatHeader />
 
       {/* Messages */}
-      <ScrollArea className="flex-1 p-4 pb-20 2xl:max-w-4xl 2xl:mx-auto">
+      <ScrollArea className="flex-1 p-4 pb-20">
         {data && <pre>{JSON.stringify(data, null, 2)}</pre>}
 
         {messages.map((m) => (
