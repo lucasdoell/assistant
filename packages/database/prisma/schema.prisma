@@ -21,6 +21,7 @@ model User {
   sessions  Session[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+  Chat      Chat[]
 
   @@index([email])
 }
@@ -31,4 +32,14 @@ model Session {
   expiresAt DateTime
 
   user User @relation(references: [id], fields: [userId], onDelete: Cascade)
+}
+
+model Chat {
+  id       String @id
+  userId   String
+  messages Json
+
+  user User @relation(references: [id], fields: [userId], onDelete: Cascade)
+
+  @@index([userId])
 }
