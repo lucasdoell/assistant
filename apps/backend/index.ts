@@ -17,7 +17,7 @@ app.use(logger());
 
 const ALLOWED_ORIGINS = ["http://localhost:3000", "http://localhost:3001"];
 
-app.use("*", cors({ origin: ALLOWED_ORIGINS }));
+app.use("*", cors({ origin: ALLOWED_ORIGINS, credentials: true }));
 
 app.use("*", async (c, next) => {
   if (c.req.method === "GET") {
