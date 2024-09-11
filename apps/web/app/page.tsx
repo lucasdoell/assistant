@@ -5,7 +5,7 @@ export default function Page() {
   return (
     <main>
       <Button asChild>
-        <Link href="/dashboard">Dashboard</Link>
+        <Link href="/chat">Chat</Link>
       </Button>
     </main>
   );
