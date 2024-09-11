@@ -127,8 +127,11 @@ importers:
         specifier: ^5.54.1
         version: 5.54.1(react@18.3.1)
       '@tauri-apps/api':
-        specifier: ^1.6.0
-        version: 1.6.0
+        specifier: ^2.0.0-rc.0
+        version: 2.0.0-rc.4
+      '@tauri-apps/plugin-http':
+        specifier: ^2.0.0-rc.2
+        version: 2.0.0-rc.2
       '@types/react-syntax-highlighter':
         specifier: ^15.5.13
         version: 15.5.13
@@ -1739,7 +1742,7 @@ packages:
 
   '@expo/bunyan@4.0.1':
     resolution: {integrity: sha512-+Lla7nYSiHZirgK+U/uYzsLv/X+HaJienbD5AKX1UQZHYfWaP+9uuQluRB4GrEVWF0GZ7vEVp/jzaOT9k/SQlg==}
-    engines: {node: '>=0.10.0'}
+    engines: {'0': node >=0.10.0}
 
   '@expo/cli@0.18.29':
     resolution: {integrity: sha512-X810C48Ss+67RdZU39YEO1khNYo1RmjouRV+vVe0QhMoTe8R6OA3t+XYEdwaNbJ5p/DJN7szfHfNmX2glpC7xg==}
@@ -3870,9 +3873,8 @@ packages:
     peerDependencies:
       react: ^18 || ^19
 
-  '@tauri-apps/api@1.6.0':
-    resolution: {integrity: sha512-rqI++FWClU5I2UBp4HXFvl+sBWkdigBkxnpJDQUWttNyG7IZP4FwQGhTNL5EOw0vI8i6eSAJ5frLqO7n7jbJdg==}
-    engines: {node: '>= 14.6.0', npm: '>= 6.6.0', yarn: '>= 1.19.1'}
+  '@tauri-apps/api@2.0.0-rc.4':
+    resolution: {integrity: sha512-UNiIhhKG08j4ooss2oEEVexffmWkgkYlC2M3GcX3VPtNsqFgVNL8Mcw/4Y7rO9M9S+ffAMnLOF5ypzyuyb8tyg==}
 
   '@tauri-apps/cli-darwin-arm64@2.0.0-rc.13':
     resolution: {integrity: sha512-j2BTeqq0b5073SUr5jLUGWwmQ0Q7/T1uXQZd0hLynYgbL6ZR83afex2ct7i50Qui03er49188EoBWy3vDE/9Kg==}
@@ -3938,6 +3940,9 @@ packages:
     resolution: {integrity: sha512-Pqn7uqMu3C2X1vnP//dU5TDaE6/PIFH5cbl2FjZiVJErKsjhlIbZMFzrWJTSSBTAK42ZxiEAh+dfw2erTBTjrQ==}
     engines: {node: '>= 10'}
     hasBin: true
+
+  '@tauri-apps/plugin-http@2.0.0-rc.2':
+    resolution: {integrity: sha512-s/AbbMaQPgqnIOoObvWNAjJOV17gyf9G+U6gmvjLoFbt7D6jsujOUW6fn+Oe/+rzNSEeo1ZSVrUoMen5DgM+OA==}
 
   '@tootallnate/once@2.0.0':
     resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}
@@ -14241,7 +14246,7 @@ snapshots:
       '@tanstack/query-core': 5.54.1
       react: 18.3.1
 
-  '@tauri-apps/api@1.6.0': {}
+  '@tauri-apps/api@2.0.0-rc.4': {}
 
   '@tauri-apps/cli-darwin-arm64@2.0.0-rc.13':
     optional: true
@@ -14285,6 +14290,10 @@ snapshots:
       '@tauri-apps/cli-win32-arm64-msvc': 2.0.0-rc.13
       '@tauri-apps/cli-win32-ia32-msvc': 2.0.0-rc.13
       '@tauri-apps/cli-win32-x64-msvc': 2.0.0-rc.13
+
+  '@tauri-apps/plugin-http@2.0.0-rc.2':
+    dependencies:
+      '@tauri-apps/api': 2.0.0-rc.4
 
   '@tootallnate/once@2.0.0': {}
 
