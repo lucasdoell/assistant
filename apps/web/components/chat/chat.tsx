@@ -3,30 +3,34 @@
 import { ChatHeader } from "@/components/chat/chat-header";
 import { ChatInput } from "@/components/chat/chat-input";
 import { Message } from "@/components/chat/message";
+import { generateChatId } from "@/lib/chat";
 import { ScrollArea } from "@ui/scroll-area";
 import type { Message as ChatMessage } from "ai";
 import { useChat } from "ai/react";
-import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export function Chat({
   existingMessages,
   chatId,
+  newChat,
 }: {
   existingMessages?: ChatMessage[];
   chatId?: string;
+  newChat?: boolean;
 }) {
+  const router = useRouter();
+  const id = newChat ? generateChatId() : chatId;
+
   const { messages, input, handleInputChange, handleSubmit, data } = useChat({
-    api: `http://localhost:8080/v1/chat${existingMessages ? "/" + chatId : ""}`,
+    api: `http://localhost:8080/v1/chat`,
     initialMessages: existingMessages ?? [],
     credentials: "include",
+    body: { id },
+    onFinish() {
+      router.push(`/chat/${id}`);
+    },
+    sendExtraMessageFields: true,
   });
-
-  useEffect(() => {
-    if (data && data[0] && !existingMessages) {
-      const { chatId } = data[0] as { chatId: string };
-      window.location.href = `/chat/${chatId}`;
-    }
-  }, [data]);
 
   return (
     <>
