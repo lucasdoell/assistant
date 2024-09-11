@@ -11,5 +11,5 @@ export default async function ChatPage() {
     redirect("/login");
   }
 
-  return <Chat />;
+  return <Chat newChat />;
 }
