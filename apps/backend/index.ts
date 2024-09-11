@@ -15,7 +15,7 @@ const app = new Hono<Context>();
 
 app.use(logger());
 
-const ALLOWED_ORIGINS = ["http://localhost:3001"];
+const ALLOWED_ORIGINS = ["http://localhost:3000", "http://localhost:3001"];
 
 app.use("*", cors({ origin: ALLOWED_ORIGINS }));
 
