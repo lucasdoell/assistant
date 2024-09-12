@@ -5,7 +5,7 @@ import { ScrollArea } from "@ui/scroll-area";
 export default function Loading() {
   return (
     <main>
-      <ChatHeader />
+      <ChatHeader chatTitle="Loading..." />
 
       <ScrollArea className="flex-1 p-4 pb-20">
         {[0, 1, 2, 3, 4].map((m, index) => (
