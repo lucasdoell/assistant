@@ -13,10 +13,12 @@ export function Chat({
   existingMessages,
   chatId,
   newChat,
+  chatTitle,
 }: {
   existingMessages?: ChatMessage[];
   chatId?: string;
   newChat?: boolean;
+  chatTitle?: string;
 }) {
   const router = useRouter();
   const id = newChat ? generateChatId() : chatId;
@@ -35,7 +37,7 @@ export function Chat({
   return (
     <>
       {/* Chat Header */}
-      <ChatHeader />
+      <ChatHeader chatTitle={chatTitle} />
 
       {/* Messages */}
       <ScrollArea className="flex-1 p-4 pb-20">
