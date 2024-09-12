@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Chat } from "@repo/db";
+import { useQuery } from "@tanstack/react-query";
 import { Button } from "@ui/button";
 import {
   Dialog,
@@ -24,6 +25,7 @@ import { Input } from "@ui/input";
 import { cn } from "@ui/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "@ui/popover";
 import { ScrollArea } from "@ui/scroll-area";
+import { Skeleton } from "@ui/skeleton";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@ui/tooltip";
 import { ChevronDown, Ellipsis } from "lucide-react";
 import Link from "next/link";
@@ -32,8 +34,23 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-export function Sidebar({ chats }: { chats: Chat[] }) {
+export function Sidebar() {
   const pathname = usePathname();
+
+  const { data: chats, isLoading } = useQuery({
+    queryKey: ["chats"],
+    queryFn: async () => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/v1/chat`,
+        {
+          credentials: "include",
+        },
+      );
+
+      return (await response.json()) as Chat[];
+    },
+    staleTime: Infinity,
+  });
 
   return (
     <div className="w-80 bg-background border-r border-border">
@@ -44,61 +61,73 @@ export function Sidebar({ chats }: { chats: Chat[] }) {
         </Button>
       </div>
       <ScrollArea className="h-[calc(100vh-80px)]">
-        {chats
-          .sort(
-            (a, b) =>
-              new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
-          )
-          .map((chat, index) => (
-            <div
-              key={index}
-              className={cn(
-                "flex items-center p-4 hover:bg-foreground/10 cursor-pointer border-b border-border",
-                pathname === `/chat/${chat.id}` && "bg-foreground/10",
-              )}
-            >
-              <div className="flex-grow min-w-0">
-                <Link href={`/chat/${chat.id}`} key={index}>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <p className="text-sm font-medium text-secondary-foreground truncate text-ellipsis max-w-[200px]">
-                        {chat.title}
-                      </p>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>{chat.title}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <p className="text-sm text-muted-foreground">
-                        {new Date(chat.updatedAt).toDateString()}
-                      </p>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>
-                        Last updated at{" "}
-                        {new Date(chat.updatedAt).toLocaleString()}
-                      </p>
-                    </TooltipContent>
-                  </Tooltip>
-                </Link>
+        {isLoading && (
+          <>
+            {[0, 1, 2, 3, 4, 5, 7, 8, 9].map((_, index) => (
+              <div className="flex items-center p-4 hover:bg-foreground/10 cursor-pointer border-b border-border">
+                <Skeleton className="h-10 w-full" />
               </div>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button size="icon" variant="ghost" className="ml-auto">
-                    <Ellipsis className="h-4 w-4" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-40">
-                  <div className="flex flex-col gap-1 space-y-2">
-                    <RenameChat id={chat.id} title={chat.title} />
-                    <DeleteChat id={chat.id} />
-                  </div>
-                </PopoverContent>
-              </Popover>
-            </div>
-          ))}
+            ))}
+          </>
+        )}
+
+        {chats &&
+          chats
+            .sort(
+              (a, b) =>
+                new Date(b.updatedAt).getTime() -
+                new Date(a.updatedAt).getTime(),
+            )
+            .map((chat, index) => (
+              <div
+                key={index}
+                className={cn(
+                  "flex items-center p-4 hover:bg-foreground/10 cursor-pointer border-b border-border",
+                  pathname === `/chat/${chat.id}` && "bg-foreground/10",
+                )}
+              >
+                <div className="flex-grow min-w-0">
+                  <Link href={`/chat/${chat.id}`} key={index}>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <p className="text-sm font-medium text-secondary-foreground truncate text-ellipsis max-w-[200px]">
+                          {chat.title}
+                        </p>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>{chat.title}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <p className="text-sm text-muted-foreground">
+                          {new Date(chat.updatedAt).toDateString()}
+                        </p>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>
+                          Last updated at{" "}
+                          {new Date(chat.updatedAt).toLocaleString()}
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </Link>
+                </div>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button size="icon" variant="ghost" className="ml-auto">
+                      <Ellipsis className="h-4 w-4" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-40">
+                    <div className="flex flex-col gap-1 space-y-2">
+                      <RenameChat id={chat.id} title={chat.title} />
+                      <DeleteChat id={chat.id} />
+                    </div>
+                  </PopoverContent>
+                </Popover>
+              </div>
+            ))}
       </ScrollArea>
     </div>
   );
