@@ -43,7 +43,7 @@ export function Sidebar({ chats }: { chats: Chat[] }) {
           <ChevronDown className="h-4 w-4 opacity-50" />
         </Button>
       </div>
-      <ScrollArea className="h-[calc(100vh-64px)]">
+      <ScrollArea className="h-[calc(100vh-80px)]">
         {chats
           .sort(
             (a, b) =>
