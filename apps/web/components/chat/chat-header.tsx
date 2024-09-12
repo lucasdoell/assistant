@@ -3,7 +3,7 @@ import { Button } from "@ui/button";
 import { PlusCircle } from "lucide-react";
 import openai from "./openai-logomark.png";
 
-export function ChatHeader() {
+export function ChatHeader({ chatTitle }: { chatTitle?: string }) {
   return (
     <div className="flex items-center justify-between p-4 border-b border-border bg-background h-20">
       <div className="flex items-center space-x-4">
@@ -12,7 +12,9 @@ export function ChatHeader() {
           <AvatarFallback>AI</AvatarFallback>
         </Avatar>
         <div>
-          <h2 className="text-lg font-semibold">Personal Assistant</h2>
+          <h2 className="text-lg font-semibold">
+            {chatTitle ?? "Personal Assistant"}
+          </h2>
           <p className="text-sm text-muted-foreground">OpenAI GPT-4o</p>
         </div>
       </div>
