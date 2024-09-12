@@ -12,18 +12,13 @@ type Chat = {
   updatedAt: string;
 };
 
-type ChatResponse =
-  | {
-      type: "success";
-      id: string;
-      messages: string;
-      createdAt: string;
-      updatedAt: string;
-    }
-  | {
-      type: "error";
-      message: string;
-    };
+type ChatResponse = {
+  id: string;
+  title: string;
+  messages: string;
+  createdAt: string;
+  updatedAt: string;
+};
 
 export default async function ChatPage({
   params,
@@ -41,8 +36,9 @@ export default async function ChatPage({
     },
   );
 
+  if (!response.ok) redirect("/chat");
+
   const chat: ChatResponse = await response.json();
-  if ("message" in chat) redirect("/chat");
 
   const messages: Chat[] = JSON.parse(chat.messages);
 
