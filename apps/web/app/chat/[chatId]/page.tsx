@@ -46,5 +46,11 @@ export default async function ChatPage({
     return { ...m, createdAt: new Date(m.createdAt) };
   });
 
-  return <Chat existingMessages={parsedMsgs} chatId={params.chatId} />;
+  return (
+    <Chat
+      existingMessages={parsedMsgs}
+      chatId={params.chatId}
+      chatTitle={chat.title}
+    />
+  );
 }
