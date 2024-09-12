@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
-import { Message } from "ai";
+import { openai } from "@ai-sdk/openai";
+import { Message, convertToCoreMessages, generateText } from "ai";
 
 export async function saveChat(
   messages: Message[],
@@ -25,9 +26,17 @@ export async function saveChat(
         data: { messages: JSON.stringify(chat) },
       });
     } else {
+      const { text: title } = await generateText({
+        model: openai("gpt-4o-mini"),
+        system:
+          "Summarize the conversation so far in a few words to give the chat a title. Return only plain text. Do not use markdown.",
+        messages: convertToCoreMessages(chat as Message[]),
+      });
+
       await prisma.chat.create({
         data: {
           id: chatId,
+          title,
           userId,
           messages: JSON.stringify(chat),
         },
