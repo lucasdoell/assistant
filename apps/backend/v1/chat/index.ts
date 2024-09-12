@@ -94,3 +94,60 @@ chatRouter.get("/:chat", async (c) => {
 
   return c.json(chat);
 });
+
+chatRouter.patch("/:chat", async (c) => {
+  const sessionId = lucia.readSessionCookie(c.req.header("Cookie") ?? "");
+  if (!sessionId) return c.json({ message: "User not found" }, 404);
+
+  const { user } = await lucia.validateSession(sessionId);
+  if (!user) return c.json({ message: "User not found" }, 404);
+
+  const chatId = c.req.param("chat");
+  if (!chatId) return c.json({ message: "Chat not found" }, 404);
+
+  const { title } = await c.req.json<{ title: string }>();
+
+  if (!title || title.length < 1 || title.length > 60) {
+    return c.json({ message: "Invalid title" }, 400);
+  }
+
+  const chat = await prisma.chat.findUnique({
+    where: { id: chatId },
+  });
+  if (!chat) return c.json({ message: "Chat not found" }, 404);
+
+  if (chat.userId !== user.id) return c.json({ message: "Forbidden" }, 403);
+
+  await prisma.chat.update({
+    where: { id: chatId },
+    data: { title },
+  });
+
+  return c.json(chat);
+});
+
+chatRouter.delete("/:chat", async (c) => {
+  const sessionId = lucia.readSessionCookie(c.req.header("Cookie") ?? "");
+  if (!sessionId) return c.json({ message: "User not found" }, 404);
+
+  const { user } = await lucia.validateSession(sessionId);
+  if (!user) return c.json({ message: "User not found" }, 404);
+
+  const chatId = c.req.param("chat");
+  if (!chatId) return c.json({ message: "Chat not found" }, 404);
+
+  const chat = await prisma.chat.findUnique({
+    where: { id: chatId },
+    select: { userId: true },
+  });
+
+  if (!chat) return c.json({ message: "Chat not found" }, 404);
+
+  if (chat.userId !== user.id) return c.json({ message: "Forbidden" }, 403);
+
+  await prisma.chat.delete({
+    where: { id: chatId },
+  });
+
+  return c.json({ message: "Chat deleted successfully" }, 200);
+});
