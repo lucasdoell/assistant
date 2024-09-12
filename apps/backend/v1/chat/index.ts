@@ -87,7 +87,7 @@ chatRouter.get("/:chat", async (c) => {
 
   const chat = await prisma.chat.findUnique({
     where: { id: chatId },
-    select: { messages: true },
+    select: { title: true, messages: true },
   });
 
   if (!chat) return c.json({ message: "Chat not found" }, 404);
