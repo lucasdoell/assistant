@@ -28,6 +28,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@ui/tooltip";
 import { ChevronDown, Ellipsis } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -104,6 +105,8 @@ export function Sidebar({ chats }: { chats: Chat[] }) {
 }
 
 function RenameChat({ id, title }: { id: string; title: string }) {
+  const [loading, setLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
 
   const formSchema = z.object({
@@ -116,6 +119,7 @@ function RenameChat({ id, title }: { id: string; title: string }) {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    setLoading(true);
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/v1/chat/${id}`,
       {
@@ -142,10 +146,12 @@ function RenameChat({ id, title }: { id: string; title: string }) {
         duration: 5000,
       });
     }
+    setLoading(false);
+    setIsOpen(false);
   }
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button>Rename</Button>
       </DialogTrigger>
@@ -172,7 +178,9 @@ function RenameChat({ id, title }: { id: string; title: string }) {
                 </FormItem>
               )}
             />
-            <Button type="submit">Submit</Button>
+            <Button type="submit" disabled={loading}>
+              {loading ? "Renaming..." : "Submit"}
+            </Button>
           </form>
         </Form>
       </DialogContent>
@@ -181,9 +189,13 @@ function RenameChat({ id, title }: { id: string; title: string }) {
 }
 
 function DeleteChat({ id }: { id: string }) {
+  const [loading, setLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
 
   async function onSubmit() {
+    setLoading(true);
+
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/v1/chat/${id}`,
       {
@@ -206,10 +218,12 @@ function DeleteChat({ id }: { id: string }) {
         duration: 5000,
       });
     }
+    setLoading(false);
+    setIsOpen(false);
   }
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button variant="destructive">Delete</Button>
       </DialogTrigger>
@@ -223,8 +237,8 @@ function DeleteChat({ id }: { id: string }) {
             undone.
           </p>
           <div className="flex justify-end">
-            <Button variant="destructive" onClick={onSubmit}>
-              Delete
+            <Button variant="destructive" onClick={onSubmit} disabled={loading}>
+              {loading ? "Deleting..." : "Delete"}
             </Button>
           </div>
         </DialogContent>
