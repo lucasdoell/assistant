@@ -61,7 +61,7 @@ export function Sidebar({ chats }: { chats: Chat[] }) {
                 <Link href={`/chat/${chat.id}`} key={index}>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <p className="text-sm font-medium text-primary truncate text-ellipsis max-w-[200px]">
+                      <p className="text-sm font-medium text-secondary-foreground truncate text-ellipsis max-w-[200px]">
                         {chat.title}
                       </p>
                     </TooltipTrigger>
