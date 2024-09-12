@@ -27,7 +27,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@ui/popover";
 import { ScrollArea } from "@ui/scroll-area";
 import { Skeleton } from "@ui/skeleton";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@ui/tooltip";
-import { ChevronDown, Ellipsis } from "lucide-react";
+import { ChevronDown, Ellipsis, PlusCircle } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
@@ -61,6 +61,20 @@ export function Sidebar() {
         </Button>
       </div>
       <ScrollArea className="h-[calc(100vh-80px)]">
+        <div
+          className={cn(
+            "flex items-center p-4 hover:bg-foreground/10 cursor-pointer border-b border-border",
+          )}
+        >
+          <div className="flex-grow min-w-0">
+            <Link href="/chat" key={0}>
+              <span className="inline-flex align-middle items-center text-sm font-medium text-secondary-foreground">
+                <PlusCircle className="h-4 w-4 mr-2" /> New Chat
+              </span>
+            </Link>
+          </div>
+        </div>
+
         {isLoading && (
           <>
             {[0, 1, 2, 3, 4, 5, 7, 8, 9].map((_, index) => (
