@@ -34,7 +34,12 @@ import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-type GroupName = "Today" | "Yesterday" | "Past Week" | "Earlier";
+type GroupName =
+  | "Today"
+  | "Yesterday"
+  | "Previous 7 Days"
+  | "Previous 30 Days"
+  | "Earlier";
 type GroupedChats = Partial<Record<GroupName, Chat[]>>;
 
 function getGroupName(date: Date): GroupName {
@@ -50,13 +55,17 @@ function getGroupName(date: Date): GroupName {
   startOfYesterday.setDate(startOfToday.getDate() - 1);
   const startOfWeek = new Date(startOfToday);
   startOfWeek.setDate(startOfToday.getDate() - 7);
+  const startOfMonth = new Date(startOfToday);
+  startOfMonth.setDate(startOfToday.getDate() - 30);
 
   if (chatDate >= startOfToday) {
     return "Today";
   } else if (chatDate >= startOfYesterday) {
     return "Yesterday";
   } else if (chatDate >= startOfWeek) {
-    return "Past Week";
+    return "Previous 7 Days";
+  } else if (chatDate >= startOfMonth) {
+    return "Previous 30 Days";
   } else {
     return "Earlier";
   }
@@ -102,11 +111,7 @@ export function Sidebar() {
         </Button>
       </div>
       <ScrollArea className="h-[calc(100vh-80px)]">
-        <div
-          className={cn(
-            "flex items-center p-4 hover:bg-foreground/10 cursor-pointer border-b border-border",
-          )}
-        >
+        <div className="flex items-center p-4 hover:bg-foreground/10 cursor-pointer border-b border-border">
           <div className="flex-grow min-w-0">
             <Link href="/chat" key="new-chat">
               <span className="inline-flex align-middle items-center text-sm font-medium text-secondary-foreground">
