@@ -71,6 +71,14 @@ function getGroupName(date: Date): GroupName {
   }
 }
 
+const groupOrder: GroupName[] = [
+  "Today",
+  "Yesterday",
+  "Previous 7 Days",
+  "Previous 30 Days",
+  "Earlier",
+];
+
 export function Sidebar() {
   const pathname = usePathname();
 
@@ -134,16 +142,22 @@ export function Sidebar() {
           </>
         )}
 
-        {groupedChats &&
-          Object.entries(groupedChats).map(([group, chats]) => (
+        {/* Grouped Chats */}
+        {groupOrder.map((group) => {
+          const chatsInGroup = groupedChats[group];
+          if (!chatsInGroup || chatsInGroup.length === 0) {
+            return null; // Skip rendering if the group has no chats
+          }
+
+          return (
             <div key={group}>
               {/* Group Header */}
-              <div className="px-4 py-4 text-xs font-semibold text-muted-foreground">
+              <div className="p-4 text-xs font-semibold text-muted-foreground">
                 {group}
               </div>
 
               {/* Chats within the Group */}
-              {chats
+              {chatsInGroup
                 .sort(
                   (a, b) =>
                     new Date(b.updatedAt).getTime() -
@@ -200,7 +214,8 @@ export function Sidebar() {
                   </div>
                 ))}
             </div>
-          ))}
+          );
+        })}
       </ScrollArea>
     </div>
   );
